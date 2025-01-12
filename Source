@@ -1,0 +1,67 @@
+local RunService = game:GetService("RunService")
+
+local screenGui = Instance.new("ScreenGui")
+local textLabel = Instance.new("TextLabel")
+
+screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+textLabel.Parent = screenGui
+
+
+textLabel.Size = UDim2.new(0.1, 0, 0.04, 0) 
+textLabel.Position = UDim2.new(1, -400, 1, -50) 
+textLabel.BackgroundColor3 = Color3.fromRGB(25, 20, 20)
+textLabel.TextColor3 = Color3.fromRGB(30, 215, 96) 
+textLabel.Font = Enum.Font.Gotham 
+textLabel.TextSize = 12 
+textLabel.TextXAlignment = Enum.TextXAlignment.Center
+textLabel.TextYAlignment = Enum.TextYAlignment.Center
+textLabel.Text = "Loading..."
+
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0.5, 0)
+corner.Parent = textLabel
+
+local frameCount = 0
+local timeElapsed = 0
+
+RunService.RenderStepped:Connect(function(deltaTime)
+    frameCount = frameCount + 1
+    timeElapsed = timeElapsed + deltaTime
+
+    if timeElapsed >= 0.5 then
+        local fps = frameCount / timeElapsed
+        textLabel.Text = string.format("FPS: %.0f", fps)
+
+        frameCount = 0
+        timeElapsed = 0
+    end
+end)
+
+local Stats = game:GetService("Stats")
+local RunService = game:GetService("RunService")
+
+local screenGui = Instance.new("ScreenGui")
+local textLabel = Instance.new("TextLabel")
+
+screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+textLabel.Parent = screenGui
+
+textLabel.Size = UDim2.new(0.1, 0, 0.04, 0)
+textLabel.Position = UDim2.new(1, -200, 1, -50) 
+textLabel.BackgroundColor3 = Color3.fromRGB(25, 20, 20)
+textLabel.TextColor3 = Color3.fromRGB(30, 215, 96)
+textLabel.Font = Enum.Font.Gotham 
+textLabel.TextSize = 12
+textLabel.TextXAlignment = Enum.TextXAlignment.Center
+textLabel.TextYAlignment = Enum.TextYAlignment.Center
+textLabel.Text = "Ping: Calculating..."
+
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0.5, 0)
+corner.Parent = textLabel
+
+RunService.RenderStepped:Connect(function()
+    local networkStats = Stats.Network
+    local ping = networkStats.ServerStatsItem["Data Ping"] and networkStats.ServerStatsItem["Data Ping"]:GetValue() or 0
+    textLabel.Text = string.format("Ping: %d ms", ping)
+end)
